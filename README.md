@@ -10,7 +10,7 @@ Added validations:
 
 # Using the module
 
-It is sufficient for the module to be in your classpath for the bean validation service provider to pick it up. For maven:
+Add the dependency to your classpath. For maven:
 
 ```xml
 <dependency>
@@ -18,6 +18,15 @@ It is sufficient for the module to be in your classpath for the bean validation 
     <artifactId>vavr-beanvalidation2</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 </dependency>
+```
+
+For the bean validation service provider to pick it up the constraints must be registered.
+Add the following to your `validation.xml` or via java config of your validation provider:
+
+```xml
+...
+<constraint-mapping>META-INF/constraints-vavr.xml</constraint-mapping>
+...
 ```
 
 Now JSR 380 validations will work on vavr types. e.g. 
