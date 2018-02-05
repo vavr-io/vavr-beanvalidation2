@@ -7,6 +7,7 @@ Added validations:
 
 - `@Size` for vavr's `Traversable<T>`
 - `@NotEmpty` for vavr's `Value<T>`
+- All available validations can be applied to nested Tuple Values. see example below
 
 # Using the module
 
@@ -29,6 +30,10 @@ Add the following to your `validation.xml` or via java config of your validation
 ...
 ```
 
+Since it would be very tedious to register all the `ValueExtractor`s for the tuple elements by yourself,
+configuration is automatically done for you via Java service loader. 
+The definition in `META-INF/services` is picked up by the validation service provider.
+
 Now JSR 380 validations will work on vavr types. e.g. 
 
 ```java
@@ -39,6 +44,8 @@ public class TestBean {
 
     @NotEmpty
     private Either<String, Integer> mustNotBeLeftOrNull = Either.right(42);
+    
+    private Tuple3<@NotBlank String, @NotBlank String, @NotNull Integer> allElementsMustBeProvided = Tuple.of("a", "x", 3);
 
     // getters and setters
     
