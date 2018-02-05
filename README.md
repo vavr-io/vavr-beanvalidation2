@@ -22,7 +22,7 @@ Add the dependency to your classpath. For maven:
 ```
 
 For the bean validation service provider to pick it up the constraints must be registered.
-Add the following to your `validation.xml` or via java config of your validation provider:
+Add the following to your `validation.xml`:
 
 ```xml
 ...
@@ -30,7 +30,7 @@ Add the following to your `validation.xml` or via java config of your validation
 ...
 ```
 
-or see `javax.validation.Configuration#addMapping`.
+Or register via java config of your validation provider. See `javax.validation.Configuration#addMapping`.
 
 Since it would be very tedious to register all the `ValueExtractor`s for the tuple elements by yourself,
 configuration is automatically done for you via Java service loader. 
