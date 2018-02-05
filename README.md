@@ -30,6 +30,8 @@ Add the following to your `validation.xml` or via java config of your validation
 ...
 ```
 
+or see `javax.validation.Configuration#addMapping`.
+
 Since it would be very tedious to register all the `ValueExtractor`s for the tuple elements by yourself,
 configuration is automatically done for you via Java service loader. 
 The definition in `META-INF/services` is picked up by the validation service provider.
