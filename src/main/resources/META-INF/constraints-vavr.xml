@@ -8,13 +8,13 @@
 
     <constraint-definition annotation="javax.validation.constraints.Size">
         <validated-by include-existing-validators="true">
-            <value>io.vavr.beanvalidation2.SizeValidatorForTraversable</value>
+            <value>io.vavr.beanvalidation2.constraintvalidators.SizeValidatorForTraversable</value>
         </validated-by>
     </constraint-definition>
 
     <constraint-definition annotation="javax.validation.constraints.NotEmpty">
         <validated-by include-existing-validators="true">
-            <value>io.vavr.beanvalidation2.NotEmptyValidatorForValue</value>
+            <value>io.vavr.beanvalidation2.constraintvalidators.NotEmptyValidatorForValue</value>
         </validated-by>
     </constraint-definition>
 

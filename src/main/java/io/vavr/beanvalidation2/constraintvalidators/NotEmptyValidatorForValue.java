@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.vavr.beanvalidation2;
+package io.vavr.beanvalidation2.constraintvalidators;
 
 import io.vavr.Value;
 

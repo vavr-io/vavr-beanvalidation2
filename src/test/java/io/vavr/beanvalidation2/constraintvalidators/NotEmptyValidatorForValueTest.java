@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.vavr.beanvalidation2;
+package io.vavr.beanvalidation2.constraintvalidators;
 
 import io.vavr.collection.List;
 import io.vavr.collection.Traversable;
@@ -34,7 +34,7 @@ import javax.validation.Validator;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 
-import static io.vavr.beanvalidation2.ValidationTestUtil.assertSingleViolation;
+import static io.vavr.beanvalidation2.constraintvalidators.ValidatorTestUtil.assertSingleViolation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NotEmptyValidatorForValueTest {
