@@ -122,7 +122,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>io.vavr</Automatic-Module-Name>
+                            <Automatic-Module-Name>io.vavr.beanvalidation2</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>
