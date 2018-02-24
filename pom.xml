@@ -41,6 +41,7 @@
 
         <validation.version>2.0.1.Final</validation.version>
         <hibernate.validator.version>6.0.7.Final</hibernate.validator.version>
+        <javax.xml.version>2.3.0</javax.xml.version>
         <javax.el.version>3.0.0</javax.el.version>
 
         <test.junit.version>4.12</test.junit.version>
@@ -76,10 +77,30 @@
             <version>${validation.version}</version>
         </dependency>
 
+        <!-- default implementation for test -->
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate.validator.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- xml dependencies for java 9 since jaxb module is deprecated -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${javax.xml.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>${javax.xml.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>${javax.xml.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

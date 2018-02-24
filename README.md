@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/vavr-io/vavr-beanvalidation2.png)](https://travis-ci.org/vavr-io/vavr-beanvalidation2)
+
 # Vavr-Beanvalidation 2.0
 
 This module provides support for bean validation 2.0 (JSR380). Can be used with any service provider of the bean validation spec 
