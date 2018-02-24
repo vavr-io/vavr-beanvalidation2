@@ -19,7 +19,7 @@ Add the dependency to your classpath. For maven:
 <dependency>
     <groupId>io.vavr</groupId>
     <artifactId>vavr-beanvalidation2</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.9.2</version>
 </dependency>
 ```
 
