@@ -67,31 +67,19 @@ public class MapValueExtractorTest {
         assertThat(parent.getName()).isEqualToIgnoringCase("map");
     }
 
-    /**
-     * @see <a href="https://github.com/vavr-io/vavr-beanvalidation2/issues/2">GH-2</a>
-     */
     @Test
-    @Ignore("GH-2 Not yet supported!")
     public void defaultConstructionShouldValidate() {
         validateAndAssertNoViolations(new TestBean());
     }
 
-    /**
-     * @see <a href="https://github.com/vavr-io/vavr-beanvalidation2/issues/2">GH-2</a>
-     */
     @Test
-    @Ignore("GH-2 Not yet supported!")
     public void havingEmptyValueShouldNotValidate() {
         TestBean bean = new TestBean();
         bean.put("b", "");
         validateAndAssertSingleViolation(bean, NotBlank.class);
     }
 
-    /**
-     * @see <a href="https://github.com/vavr-io/vavr-beanvalidation2/issues/2">GH-2</a>
-     */
     @Test
-    @Ignore("GH-2 Not yet supported!")
     public void havingComplexKeyShouldNotValidate() {
         TestBean bean = new TestBean();
         bean.put("bad", "ok");

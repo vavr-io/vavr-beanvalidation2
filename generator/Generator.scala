@@ -31,12 +31,17 @@ val TARGET_TEST = s"${project.getBasedir()}/src-gen/test/java"
 val TARGET_MAIN_RES = s"${project.getBasedir()}/src-gen/main/resources"
 val CHARSET = java.nio.charset.StandardCharsets.UTF_8
 
+val collectionValueExtractors =
+  """io.vavr.beanvalidation2.valueextraction.MapKeyExtractor
+    |io.vavr.beanvalidation2.valueextraction.MapValueExtractor
+    |""".stripMargin
+
 // generate extractors
 for (t <- 1 to N) genVavrFile("io.vavr.beanvalidation2.valueextraction", s"Tuple${t}Extractor")(genExtractor(t))
 
 // generate service loader file
 genFile(TARGET_MAIN_RES, "META-INF/services", "javax.validation.valueextraction.ValueExtractor"){
-  (for {
+  collectionValueExtractors + (for {
     a <- 1 to N
     p <- 1 to a
   } yield s"""io.vavr.beanvalidation2.valueextraction.Tuple${a}Extractor$$${getNameForPosition(p)}Extractor""").mkString("\n")
