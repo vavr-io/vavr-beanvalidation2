@@ -5,11 +5,14 @@
 This module provides support for bean validation 2.0 (JSR380). Can be used with any service provider of the bean validation spec 
 e.g. `org.hibernate.validator:hibernate-validator`
 
-Added validations:
+Features:
 
 - `@Size` for vavr's `Traversable<T>`
 - `@NotEmpty` for vavr's `Value<T>`
-- All available validations can be applied to nested Tuple Values. see example below
+- All available validations can be applied to nested Tuple Values. See example below
+- All available validations can be applied to vavr's `Map<K, V>`s
+- All available validations on nested collection element types now give proper feedback 
+as to where violations occured (index for `Seq`s and key for `Map`s) 
 
 # Using the module
 
@@ -19,7 +22,7 @@ Add the dependency to your classpath. For maven:
 <dependency>
     <groupId>io.vavr</groupId>
     <artifactId>vavr-beanvalidation2</artifactId>
-    <version>0.9.2</version>
+    <version>0.9.3</version>
 </dependency>
 ```
 
@@ -51,6 +54,8 @@ public class TestBean {
     
     private Tuple3<@NotBlank String, @NotBlank String, @NotNull Integer> allElementsMustBeProvided = Tuple.of("a", "x", 3);
 
+    private Map<@Pattern(regexp = "^[a-z]$") String, @NotBlank String> allCharKeysMustHaveNonBlankValues;
+    
     // getters and setters
     
 }
