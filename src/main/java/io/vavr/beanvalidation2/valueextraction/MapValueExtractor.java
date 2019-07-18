@@ -30,6 +30,6 @@ public class MapValueExtractor implements ValueExtractor<Map<?, @ExtractedValue 
 
     @Override
     public void extractValues(Map<?, ?> originalValue, ValueReceiver receiver) {
-        originalValue.forEach(e -> receiver.keyedValue(MAP_VALUE_NODE_NAME, e._2, e._2));
+        originalValue.forEach(e -> receiver.keyedValue(MAP_VALUE_NODE_NAME, e._1, e._2));
     }
 }
