@@ -1,3 +1,4 @@
+io.vavr.beanvalidation2.valueextraction.SeqValueExtractor
 io.vavr.beanvalidation2.valueextraction.MapKeyExtractor
 io.vavr.beanvalidation2.valueextraction.MapValueExtractor
 io.vavr.beanvalidation2.valueextraction.Tuple1Extractor$FirstExtractor

@@ -32,7 +32,8 @@ val TARGET_MAIN_RES = s"${project.getBasedir()}/src-gen/main/resources"
 val CHARSET = java.nio.charset.StandardCharsets.UTF_8
 
 val collectionValueExtractors =
-  """io.vavr.beanvalidation2.valueextraction.MapKeyExtractor
+  """io.vavr.beanvalidation2.valueextraction.SeqValueExtractor
+    |io.vavr.beanvalidation2.valueextraction.MapKeyExtractor
     |io.vavr.beanvalidation2.valueextraction.MapValueExtractor
     |""".stripMargin
 

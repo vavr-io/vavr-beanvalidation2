@@ -48,7 +48,7 @@ public class SeqValueExtractorTest {
         assertThat(violations).isEmpty();
     }
 
-    private <T> void validateAndAssertSingleViolation(T target) {
+    private <T> void validateAndAssertSingleViolation(T target, int position) {
         Collection<ConstraintViolation<T>> violations = validator.validate(target);
 
         assertThat(violations).isNotEmpty().hasSize(1);
@@ -62,6 +62,7 @@ public class SeqValueExtractorTest {
 
         Path.Node parent = iterator.next();
         assertThat(parent.getName()).isEqualToIgnoringCase("list");
+        assertThat(parent.getIndex()).isEqualTo(position);
     }
 
     @Test
@@ -73,7 +74,7 @@ public class SeqValueExtractorTest {
     public void havingEmptyValueShouldNotValidate() {
         TestBean bean = new TestBean();
         bean.add("");
-        validateAndAssertSingleViolation(bean);
+        validateAndAssertSingleViolation(bean, 2);
     }
 
     private static class TestBean {
