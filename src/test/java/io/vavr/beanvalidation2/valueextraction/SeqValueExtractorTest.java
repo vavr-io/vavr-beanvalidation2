@@ -62,7 +62,10 @@ public class SeqValueExtractorTest {
 
         Path.Node parent = iterator.next();
         assertThat(parent.getName()).isEqualToIgnoringCase("list");
-        assertThat(parent.getIndex()).isEqualTo(position);
+
+        Path.Node child = iterator.next();
+        assertThat(child.getName()).isEqualToIgnoringCase("<seq element>");
+        assertThat(child.getIndex()).isEqualTo(position);
     }
 
     @Test

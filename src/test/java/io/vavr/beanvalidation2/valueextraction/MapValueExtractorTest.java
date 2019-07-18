@@ -51,7 +51,7 @@ public class MapValueExtractorTest {
         assertThat(violations).isEmpty();
     }
 
-    private <T> void validateAndAssertSingleViolation(T target, Class<?> constraint) {
+    private <T> void validateAndAssertSingleViolation(T target, Class<?> constraint, String key) {
         Collection<ConstraintViolation<T>> violations = validator.validate(target);
 
         assertThat(violations).isNotEmpty().hasSize(1);
@@ -65,6 +65,9 @@ public class MapValueExtractorTest {
 
         Path.Node parent = iterator.next();
         assertThat(parent.getName()).isEqualToIgnoringCase("map");
+
+        Path.Node child = iterator.next();
+        assertThat(child.getKey().toString()).isEqualToIgnoringCase(key);
     }
 
     @Test
@@ -76,14 +79,14 @@ public class MapValueExtractorTest {
     public void havingEmptyValueShouldNotValidate() {
         TestBean bean = new TestBean();
         bean.put("b", "");
-        validateAndAssertSingleViolation(bean, NotBlank.class);
+        validateAndAssertSingleViolation(bean, NotBlank.class, "b");
     }
 
     @Test
     public void havingComplexKeyShouldNotValidate() {
         TestBean bean = new TestBean();
         bean.put("bad", "ok");
-        validateAndAssertSingleViolation(bean, Pattern.class);
+        validateAndAssertSingleViolation(bean, Pattern.class, "bad");
     }
 
     @Test
@@ -95,14 +98,14 @@ public class MapValueExtractorTest {
     public void jvmHavingEmptyValueShouldNotValidate() {
         JvmTestBean bean = new JvmTestBean();
         bean.put("b", "");
-        validateAndAssertSingleViolation(bean, NotBlank.class);
+        validateAndAssertSingleViolation(bean, NotBlank.class, "b");
     }
 
     @Test
     public void jvmHavingComplexKeyShouldNotValidate() {
         JvmTestBean bean = new JvmTestBean();
         bean.put("bad", "ok");
-        validateAndAssertSingleViolation(bean, Pattern.class);
+        validateAndAssertSingleViolation(bean, Pattern.class, "bad");
     }
 
     private static class TestBean {
