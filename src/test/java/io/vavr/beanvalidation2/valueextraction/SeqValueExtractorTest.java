@@ -29,6 +29,8 @@ import javax.validation.Path;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -48,7 +50,9 @@ public class SeqValueExtractorTest {
         assertThat(violations).isEmpty();
     }
 
-    private <T> void validateAndAssertSingleViolation(T target, int position) {
+    private <T> void validateAndAssertSingleViolation(
+            T target, int position, String type
+    ) {
         Collection<ConstraintViolation<T>> violations = validator.validate(target);
 
         assertThat(violations).isNotEmpty().hasSize(1);
@@ -60,11 +64,14 @@ public class SeqValueExtractorTest {
 
         Iterator<Path.Node> iterator = violation.getPropertyPath().iterator();
 
+        assertThat(violation.getPropertyPath().toString())
+                .isEqualTo("list[2].<" + type + " element>");
+
         Path.Node parent = iterator.next();
         assertThat(parent.getName()).isEqualToIgnoringCase("list");
 
         Path.Node child = iterator.next();
-        assertThat(child.getName()).isEqualToIgnoringCase("<seq element>");
+        assertThat(child.getName()).isEqualToIgnoringCase("<" + type + " element>");
         assertThat(child.getIndex()).isEqualTo(position);
     }
 
@@ -77,7 +84,19 @@ public class SeqValueExtractorTest {
     public void havingEmptyValueShouldNotValidate() {
         TestBean bean = new TestBean();
         bean.add("");
-        validateAndAssertSingleViolation(bean, 2);
+        validateAndAssertSingleViolation(bean, 2, "seq");
+    }
+
+    @Test
+    public void defaultConstructionShouldValidateForJava() {
+        validateAndAssertNoViolations(new JavaTestBean());
+    }
+
+    @Test
+    public void havingEmptyValueShouldNotValidateForJava() {
+        JavaTestBean bean = new JavaTestBean();
+        bean.add("");
+        validateAndAssertSingleViolation(bean, 2, "list");
     }
 
     private static class TestBean {
@@ -85,6 +104,15 @@ public class SeqValueExtractorTest {
 
         void add(String value) {
             list = list.append(value);
+        }
+    }
+
+    private static class JavaTestBean {
+        private java.util.List<@NotBlank String> list =
+                new ArrayList<>(Arrays.asList("a", "b"));
+
+        void add(String value) {
+            list.add(value);
         }
     }
 }

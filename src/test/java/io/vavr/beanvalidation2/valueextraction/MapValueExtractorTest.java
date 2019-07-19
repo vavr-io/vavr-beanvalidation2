@@ -22,7 +22,6 @@ package io.vavr.beanvalidation2.valueextraction;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.validation.ConstraintViolation;
@@ -38,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MapValueExtractorTest {
 
-    protected static final String SINGLE_CHAR = "^[a-z]$";
+    private static final String SINGLE_CHAR = "^[a-z]$";
     private Validator validator;
 
     @Before
@@ -51,7 +50,9 @@ public class MapValueExtractorTest {
         assertThat(violations).isEmpty();
     }
 
-    private <T> void validateAndAssertSingleViolation(T target, Class<?> constraint, String key) {
+    private <T> void validateAndAssertSingleViolation(
+            T target, Class<?> constraint, String position, String type, String entry
+    ) {
         Collection<ConstraintViolation<T>> violations = validator.validate(target);
 
         assertThat(violations).isNotEmpty().hasSize(1);
@@ -60,6 +61,8 @@ public class MapValueExtractorTest {
         assertThat(violation.getPropertyPath()).isNotEmpty().hasSize(2);
 
         assertThat(violation.getConstraintDescriptor().getAnnotation()).isInstanceOf(constraint);
+        assertThat(violation.getPropertyPath().toString())
+                .isEqualTo("map" + type + "[" + position + "].<map " + entry + ">");
 
         Iterator<Path.Node> iterator = violation.getPropertyPath().iterator();
 
@@ -67,7 +70,7 @@ public class MapValueExtractorTest {
         assertThat(parent.getName()).isEqualToIgnoringCase("map");
 
         Path.Node child = iterator.next();
-        assertThat(child.getKey().toString()).isEqualToIgnoringCase(key);
+        assertThat(child.getKey().toString()).isEqualToIgnoringCase(position);
     }
 
     @Test
@@ -79,33 +82,45 @@ public class MapValueExtractorTest {
     public void havingEmptyValueShouldNotValidate() {
         TestBean bean = new TestBean();
         bean.put("b", "");
-        validateAndAssertSingleViolation(bean, NotBlank.class, "b");
+        validateAndAssertSingleViolation(
+                bean, NotBlank.class, "b",
+                "<V>", "value"
+        );
     }
 
     @Test
     public void havingComplexKeyShouldNotValidate() {
         TestBean bean = new TestBean();
         bean.put("bad", "ok");
-        validateAndAssertSingleViolation(bean, Pattern.class, "bad");
+        validateAndAssertSingleViolation(
+                bean, Pattern.class, "bad",
+                "<K>", "key"
+        );
     }
 
     @Test
-    public void jvmDefaultConstructionShouldValidate() {
-        validateAndAssertNoViolations(new JvmTestBean());
+    public void defaultConstructionShouldValidateForJava() {
+        validateAndAssertNoViolations(new JavaTestBean());
     }
 
     @Test
-    public void jvmHavingEmptyValueShouldNotValidate() {
-        JvmTestBean bean = new JvmTestBean();
+    public void havingEmptyValueShouldNotValidateForJava() {
+        JavaTestBean bean = new JavaTestBean();
         bean.put("b", "");
-        validateAndAssertSingleViolation(bean, NotBlank.class, "b");
+        validateAndAssertSingleViolation(
+                bean, NotBlank.class, "b",
+                "", "value"
+        );
     }
 
     @Test
-    public void jvmHavingComplexKeyShouldNotValidate() {
-        JvmTestBean bean = new JvmTestBean();
+    public void havingComplexKeyShouldNotValidateForJava() {
+        JavaTestBean bean = new JavaTestBean();
         bean.put("bad", "ok");
-        validateAndAssertSingleViolation(bean, Pattern.class, "bad");
+        validateAndAssertSingleViolation(
+                bean, Pattern.class, "bad",
+                "<K>", "key"
+        );
     }
 
     private static class TestBean {
@@ -117,11 +132,11 @@ public class MapValueExtractorTest {
         }
     }
 
-    private static class JvmTestBean {
+    private static class JavaTestBean {
         private java.util.Map<@Pattern(regexp = SINGLE_CHAR) String, @NotBlank String> map =
                 new java.util.HashMap<>();
 
-        JvmTestBean() {
+        JavaTestBean() {
             put("a", "b");
         }
 

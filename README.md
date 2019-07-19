@@ -10,7 +10,7 @@ Features:
 - `@Size` for vavr's `Traversable<T>`
 - `@NotEmpty` for vavr's `Value<T>`
 - All available validations can be applied to nested Tuple Values. See example below
-- All available validations can be applied to vavr's `Map<K, V>`s
+- All available validations can be applied to vavr's `Map<K, V>`s and `Traversable<T>`s
 - All available validations on nested collection element types now give proper feedback 
 as to where violations occured (index for `Seq`s and key for `Map`s) 
 
@@ -47,14 +47,18 @@ Now JSR 380 validations will work on vavr types. e.g.
 public class TestBean {
 
     @Size(min = 1, max = 2)
-    private Seq<Integer> seqWithOneOrTwoElems = List.of(0);
+    private Seq<@Max(10) Integer> seqWithOneOrTwoDecimals = List.of(0);
 
     @NotEmpty
     private Either<String, Integer> mustNotBeLeftOrNull = Either.right(42);
     
-    private Tuple3<@NotBlank String, @NotBlank String, @NotNull Integer> allElementsMustBeProvided = Tuple.of("a", "x", 3);
+    private Tuple3<@NotBlank String, @NotBlank String, @NotNull Integer> allElementsMustBeProvided =
+        Tuple.of("a", "x", 3);
 
-    private Map<@Pattern(regexp = "^[a-z]$") String, @NotBlank String> allCharKeysMustHaveNonBlankValues;
+    @NotNull
+    @NotEmpty
+    private Map<@Pattern(regexp = "^[a-z]$") String, @NotBlank String> allCharKeysMustHaveNonBlankValues =
+        HashMap.of("a", "Alice");
     
     // getters and setters
     
