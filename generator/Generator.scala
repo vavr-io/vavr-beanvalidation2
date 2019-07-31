@@ -25,7 +25,7 @@ import java.nio.file.{Files, Paths, StandardOpenOption}
 // see io.vavr:vavr Generator
 
 val N = 8
-val TUPLE_NODE_NAME = "<tuple element>"
+val TUPLE_NODE_NAME = "<element>"
 val TARGET_MAIN = s"${project.getBasedir()}/src-gen/main/java"
 val TARGET_TEST = s"${project.getBasedir()}/src-gen/test/java"
 val TARGET_MAIN_RES = s"${project.getBasedir()}/src-gen/main/resources"
@@ -35,6 +35,10 @@ val collectionValueExtractors =
   """io.vavr.beanvalidation2.valueextraction.SeqValueExtractor
     |io.vavr.beanvalidation2.valueextraction.MapKeyExtractor
     |io.vavr.beanvalidation2.valueextraction.MapValueExtractor
+    |io.vavr.beanvalidation2.valueextraction.MultimapKeyExtractor
+    |io.vavr.beanvalidation2.valueextraction.MultimapValueExtractor
+    |io.vavr.beanvalidation2.valueextraction.EitherLeftExtractor
+    |io.vavr.beanvalidation2.valueextraction.EitherRightExtractor
     |""".stripMargin
 
 // generate extractors

@@ -17,22 +17,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.vavr.beanvalidation2.valueextraction;
+package io.vavr.beanvalidation2;
 
-import io.vavr.collection.Seq;
+import io.vavr.Lazy;
 
-import javax.validation.valueextraction.ExtractedValue;
-import javax.validation.valueextraction.ValueExtractor;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import java.util.function.Supplier;
 
-public class SeqValueExtractor implements ValueExtractor<Seq<@ExtractedValue ?>> {
+public final class ValidatorSupplier implements Supplier<Validator> {
+	public static final ValidatorSupplier INSTANCE = new ValidatorSupplier();
 
-    private static final String SEQ_INDEX_NODE_NAME = "<sequence element>";
+	private final Supplier<Validator> delegate = Lazy.of(() ->
+					Validation.buildDefaultValidatorFactory().getValidator()
+	);
 
-    @Override
-    public void extractValues(Seq<?> originalValue, ValueReceiver receiver) {
-        int index = 0; // avoid access by index because of O(n) performance of List
-        for (Object element : originalValue) {
-            receiver.indexedValue(SEQ_INDEX_NODE_NAME, index++, element);
-        }
-    }
+	private ValidatorSupplier() {
+		// nothing here
+	}
+
+	@Override
+	public Validator get() {
+		return delegate.get();
+	}
 }

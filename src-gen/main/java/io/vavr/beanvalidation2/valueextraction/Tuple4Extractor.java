@@ -38,7 +38,7 @@
   
               @Override
               public void extractValues(Tuple4<?, ?, ?, ?> originalValue, ValueReceiver receiver) {
-                  receiver.indexedValue("<tuple element>", 1, originalValue._1);
+                  receiver.indexedValue("<element>", 1, originalValue._1);
               }
   
           }
@@ -48,7 +48,7 @@
   
               @Override
               public void extractValues(Tuple4<?, ?, ?, ?> originalValue, ValueReceiver receiver) {
-                  receiver.indexedValue("<tuple element>", 2, originalValue._2);
+                  receiver.indexedValue("<element>", 2, originalValue._2);
               }
   
           }
@@ -58,7 +58,7 @@
   
               @Override
               public void extractValues(Tuple4<?, ?, ?, ?> originalValue, ValueReceiver receiver) {
-                  receiver.indexedValue("<tuple element>", 3, originalValue._3);
+                  receiver.indexedValue("<element>", 3, originalValue._3);
               }
   
           }
@@ -68,7 +68,7 @@
   
               @Override
               public void extractValues(Tuple4<?, ?, ?, ?> originalValue, ValueReceiver receiver) {
-                  receiver.indexedValue("<tuple element>", 4, originalValue._4);
+                  receiver.indexedValue("<element>", 4, originalValue._4);
               }
   
           }

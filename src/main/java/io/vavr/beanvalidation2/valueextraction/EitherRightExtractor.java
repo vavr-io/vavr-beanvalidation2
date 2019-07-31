@@ -19,20 +19,20 @@
  */
 package io.vavr.beanvalidation2.valueextraction;
 
-import io.vavr.collection.Seq;
+import io.vavr.control.Either;
 
 import javax.validation.valueextraction.ExtractedValue;
 import javax.validation.valueextraction.ValueExtractor;
 
-public class SeqValueExtractor implements ValueExtractor<Seq<@ExtractedValue ?>> {
+public class EitherRightExtractor implements ValueExtractor<Either<?,@ExtractedValue ?>> {
+	private static final String NODE_NAME = "<right element>";
 
-    private static final String SEQ_INDEX_NODE_NAME = "<sequence element>";
-
-    @Override
-    public void extractValues(Seq<?> originalValue, ValueReceiver receiver) {
-        int index = 0; // avoid access by index because of O(n) performance of List
-        for (Object element : originalValue) {
-            receiver.indexedValue(SEQ_INDEX_NODE_NAME, index++, element);
-        }
-    }
+	@Override
+	public void extractValues(Either<?, ?> originalValue, ValueReceiver receiver) {
+		if (originalValue.isRight()) {
+			receiver.value(NODE_NAME, originalValue.get());
+		} else {
+			receiver.value(NODE_NAME, null);
+		}
+	}
 }

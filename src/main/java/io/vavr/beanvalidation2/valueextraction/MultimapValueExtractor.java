@@ -19,20 +19,18 @@
  */
 package io.vavr.beanvalidation2.valueextraction;
 
-import io.vavr.collection.Seq;
+import io.vavr.collection.Multimap;
 
 import javax.validation.valueextraction.ExtractedValue;
 import javax.validation.valueextraction.ValueExtractor;
 
-public class SeqValueExtractor implements ValueExtractor<Seq<@ExtractedValue ?>> {
+public class MultimapValueExtractor
+        implements ValueExtractor<Multimap<?, @ExtractedValue ?>> {
 
-    private static final String SEQ_INDEX_NODE_NAME = "<sequence element>";
+    private static final String MAP_VALUE_NODE_NAME = "<map value>";
 
     @Override
-    public void extractValues(Seq<?> originalValue, ValueReceiver receiver) {
-        int index = 0; // avoid access by index because of O(n) performance of List
-        for (Object element : originalValue) {
-            receiver.indexedValue(SEQ_INDEX_NODE_NAME, index++, element);
-        }
+    public void extractValues(Multimap<?, ?> originalValue, ValueReceiver receiver) {
+        originalValue.forEach(e -> receiver.keyedValue(MAP_VALUE_NODE_NAME, e._1, e._2));
     }
 }

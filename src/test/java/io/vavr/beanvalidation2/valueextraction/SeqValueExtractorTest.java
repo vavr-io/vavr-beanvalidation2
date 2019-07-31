@@ -19,6 +19,7 @@
  */
 package io.vavr.beanvalidation2.valueextraction;
 
+import io.vavr.beanvalidation2.ValidatorSupplier;
 import io.vavr.collection.List;
 import io.vavr.collection.Seq;
 import org.junit.Before;
@@ -26,7 +27,6 @@ import org.junit.Test;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
-import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class SeqValueExtractorTest {
 
     @Before
     public void setUp() {
-        this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+        this.validator = ValidatorSupplier.INSTANCE.get();
     }
 
     private <T> void validateAndAssertNoViolations(T target) {
@@ -65,10 +65,10 @@ public class SeqValueExtractorTest {
         Iterator<Path.Node> iterator = violation.getPropertyPath().iterator();
 
         assertThat(violation.getPropertyPath().toString())
-                .isEqualTo("list[2].<" + type + " element>");
+                .isEqualTo("letters[2].<" + type + " element>");
 
         Path.Node parent = iterator.next();
-        assertThat(parent.getName()).isEqualToIgnoringCase("list");
+        assertThat(parent.getName()).isEqualToIgnoringCase("letters");
 
         Path.Node child = iterator.next();
         assertThat(child.getName()).isEqualToIgnoringCase("<" + type + " element>");
@@ -84,7 +84,7 @@ public class SeqValueExtractorTest {
     public void havingEmptyValueShouldNotValidate() {
         TestBean bean = new TestBean();
         bean.add("");
-        validateAndAssertSingleViolation(bean, 2, "seq");
+        validateAndAssertSingleViolation(bean, 2, "sequence");
     }
 
     @Test
@@ -100,19 +100,19 @@ public class SeqValueExtractorTest {
     }
 
     private static class TestBean {
-        private Seq<@NotBlank String> list = List.of("a", "b");
+        private Seq<@NotBlank String> letters = List.of("a", "b");
 
         void add(String value) {
-            list = list.append(value);
+            letters = letters.append(value);
         }
     }
 
     private static class JavaTestBean {
-        private java.util.List<@NotBlank String> list =
+        private java.util.List<@NotBlank String> letters =
                 new ArrayList<>(Arrays.asList("a", "b"));
 
         void add(String value) {
-            list.add(value);
+            letters.add(value);
         }
     }
 }

@@ -19,19 +19,22 @@
  */
 package io.vavr.beanvalidation2.valueextraction;
 
+import io.vavr.beanvalidation2.ValidatorSupplier;
 import io.vavr.collection.HashMap;
+import io.vavr.collection.HashMultimap;
+import io.vavr.collection.List;
 import io.vavr.collection.Map;
+import io.vavr.collection.Multimap;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.ElementKind;
 import javax.validation.Path;
-import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
-import java.util.Iterator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,7 +45,7 @@ public class MapValueExtractorTest {
 
     @Before
     public void setUp() {
-        this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+        this.validator = ValidatorSupplier.INSTANCE.get();
     }
 
     private <T> void validateAndAssertNoViolations(T target) {
@@ -51,7 +54,11 @@ public class MapValueExtractorTest {
     }
 
     private <T> void validateAndAssertSingleViolation(
-            T target, Class<?> constraint, String position, String type, String entry
+            T target, Class<?> constraint,
+            String position,
+            Class<?> type,
+            String fieldName,
+            String entryName
     ) {
         Collection<ConstraintViolation<T>> violations = validator.validate(target);
 
@@ -61,16 +68,28 @@ public class MapValueExtractorTest {
         assertThat(violation.getPropertyPath()).isNotEmpty().hasSize(2);
 
         assertThat(violation.getConstraintDescriptor().getAnnotation()).isInstanceOf(constraint);
-        assertThat(violation.getPropertyPath().toString())
-                .isEqualTo("map" + type + "[" + position + "].<map " + entry + ">");
+        validateMapPropertyPath(
+                violation.getPropertyPath(), type, position,
+                fieldName, entryName
+        );
+    }
 
-        Iterator<Path.Node> iterator = violation.getPropertyPath().iterator();
+    private void validateMapPropertyPath(
+            Path propertyPath, Class<?> type, String key,
+            String fieldName, String entryName
+    ) {
+        List<Path.Node> nodes = List.ofAll(propertyPath);
+        assertThat(nodes).hasSize(2);
 
-        Path.Node parent = iterator.next();
-        assertThat(parent.getName()).isEqualToIgnoringCase("map");
+        // head element -> map
+        assertThat(nodes.head().getKind()).isEqualTo(ElementKind.PROPERTY);
+        assertThat(nodes.head().getName()).isEqualTo(fieldName);
 
-        Path.Node child = iterator.next();
-        assertThat(child.getKey().toString()).isEqualToIgnoringCase(position);
+        // last element -> entry
+        assertThat(nodes.last().getKind()).isEqualTo(ElementKind.CONTAINER_ELEMENT);
+        assertThat(nodes.last().getName()).isEqualTo("<map " + entryName + ">");
+        assertThat(nodes.last().getKey()).isEqualTo(key);
+        assertThat(nodes.last().as(Path.ContainerElementNode.class).getContainerClass()).isEqualTo(type);
     }
 
     @Test
@@ -83,8 +102,18 @@ public class MapValueExtractorTest {
         TestBean bean = new TestBean();
         bean.put("b", "");
         validateAndAssertSingleViolation(
-                bean, NotBlank.class, "b",
-                "<V>", "value"
+                bean, NotBlank.class,
+                "b", Map.class, "entries", "value"
+        );
+    }
+
+    @Test
+    public void havingEmptyValueForMultimapShouldNotValidate() {
+        TestBean bean = new TestBean();
+        bean.add("a", "");
+        validateAndAssertSingleViolation(
+                bean, NotBlank.class,
+                "a", Multimap.class, "multientries", "value"
         );
     }
 
@@ -93,8 +122,18 @@ public class MapValueExtractorTest {
         TestBean bean = new TestBean();
         bean.put("bad", "ok");
         validateAndAssertSingleViolation(
-                bean, Pattern.class, "bad",
-                "<K>", "key"
+                bean, Pattern.class,
+                "bad", Map.class, "entries", "key"
+        );
+    }
+
+    @Test
+    public void havingComplexKeyForMultimapShouldNotValidate() {
+        TestBean bean = new TestBean();
+        bean.add("bad", "ok");
+        validateAndAssertSingleViolation(
+                bean, Pattern.class,
+                "bad", Multimap.class, "multientries", "key"
         );
     }
 
@@ -108,8 +147,8 @@ public class MapValueExtractorTest {
         JavaTestBean bean = new JavaTestBean();
         bean.put("b", "");
         validateAndAssertSingleViolation(
-                bean, NotBlank.class, "b",
-                "", "value"
+                bean, NotBlank.class,
+                "b", java.util.Map.class, "entries", "value"
         );
     }
 
@@ -118,22 +157,29 @@ public class MapValueExtractorTest {
         JavaTestBean bean = new JavaTestBean();
         bean.put("bad", "ok");
         validateAndAssertSingleViolation(
-                bean, Pattern.class, "bad",
-                "<K>", "key"
+                bean, Pattern.class,
+                "bad", java.util.Map.class,"entries",  "key"
         );
     }
 
     private static class TestBean {
-        private Map<@Pattern(regexp = SINGLE_CHAR) String, @NotBlank String> map =
+        private Map<@Pattern(regexp = SINGLE_CHAR) String, @NotBlank String> entries =
                 HashMap.of("a", "b");
 
+        private Multimap<@Pattern(regexp = SINGLE_CHAR) String, @NotBlank String> multientries =
+                HashMultimap.withSet().of(entries.head());
+
         void put(String key, String value) {
-            map = map.put(key, value);
+            entries = entries.put(key, value);
+        }
+
+        void add(String key, String value) {
+            multientries = multientries.put(key, value);
         }
     }
 
     private static class JavaTestBean {
-        private java.util.Map<@Pattern(regexp = SINGLE_CHAR) String, @NotBlank String> map =
+        private java.util.Map<@Pattern(regexp = SINGLE_CHAR) String, @NotBlank String> entries =
                 new java.util.HashMap<>();
 
         JavaTestBean() {
@@ -141,7 +187,7 @@ public class MapValueExtractorTest {
         }
 
         void put(String key, String value) {
-            map.put(key, value);
+            entries.put(key, value);
         }
     }
 }

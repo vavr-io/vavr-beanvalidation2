@@ -19,6 +19,7 @@
  */
 package io.vavr.beanvalidation2.constraintvalidators;
 
+import io.vavr.beanvalidation2.ValidatorSupplier;
 import io.vavr.collection.List;
 import io.vavr.collection.Traversable;
 import io.vavr.collection.Vector;
@@ -29,7 +30,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
@@ -44,7 +44,7 @@ public class NotEmptyValidatorForValueTest {
 
     @Before
     public void setUp() {
-        this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+        this.validator = ValidatorSupplier.INSTANCE.get();
         this.bean = new TestBean();
     }
 
