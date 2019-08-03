@@ -12,7 +12,7 @@ Features:
 - All available validations can be applied to nested Tuple Values. See example below
 - All available validations can be applied to vavr's `Map<K, V>`s and `Traversable<T>`s
 - All available validations on nested collection element types now give proper feedback 
-as to where violations occured (index for `Seq`s and key for `Map`s) 
+as to where violations occurred (index for `Seq`s and key for `Map`s) 
 
 # Using the module
 
@@ -22,7 +22,7 @@ Add the dependency to your classpath. For maven:
 <dependency>
     <groupId>io.vavr</groupId>
     <artifactId>vavr-beanvalidation2</artifactId>
-    <version>0.9.3</version>
+    <version>0.10.0</version>
 </dependency>
 ```
 
