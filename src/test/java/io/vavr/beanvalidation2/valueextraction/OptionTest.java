@@ -26,7 +26,6 @@ import io.vavr.collection.List;
 import io.vavr.collection.Set;
 import io.vavr.control.Option;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.validation.ConstraintViolation;
@@ -73,7 +72,6 @@ public class OptionTest {
 	}
 
 	@Test
-	@Ignore("On line 79 value is <iterable element> instead of <element>")
 	public void testOnInvalid() {
 		// given
 		TestBean subject = new TestBean();
@@ -96,7 +94,7 @@ public class OptionTest {
 		assertThat(nodes.last().getKind()).isEqualTo(ElementKind.CONTAINER_ELEMENT);
 		assertThat(nodes.last().as(Path.ContainerElementNode.class).getContainerClass())
 				.isEqualTo(Option.class);
-		assertThat(nodes.last().getName()).isEqualTo("<element>");
+		assertThat(nodes.last().getName()).isEqualTo("<iterable element>");
 	}
 
 	private static final class TestBean {
