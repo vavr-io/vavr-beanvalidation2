@@ -10,7 +10,8 @@ Features:
 - `@Size` for vavr's `Traversable<T>`
 - `@NotEmpty` for vavr's `Value<T>`
 - All available validations can be applied to nested Tuple Values. See example below
-- All available validations can be applied to vavr's `Map<K, V>`s and `Traversable<T>`s
+- All available validations can be applied to vavr's `Map<K, V>`s and `Traversable<T>`s 
+including `Multimap<K, V>`s
 - All available validations on nested collection element types now give proper feedback 
 as to where violations occurred (index for `Seq`s and key for `Map`s) 
 
@@ -50,7 +51,7 @@ public class TestBean {
     private Seq<@Max(10) Integer> seqWithOneOrTwoDecimals = List.of(0);
 
     @NotEmpty
-    private Either<String, Integer> mustNotBeLeftOrNull = Either.right(42);
+    private Either<String, @Positive Integer> mustNotBeLeftOrNull = Either.right(42);
     
     private Tuple3<@NotBlank String, @NotBlank String, @NotNull Integer> allElementsMustBeProvided =
         Tuple.of("a", "x", 3);
@@ -64,3 +65,10 @@ public class TestBean {
     
 }
 ```
+
+# Considerations/Limitations
+
+- While it is possible to validate `Try<T>` and `Lazy<T>`, the usage of these monads for beanvalidation
+is questionable. Furthermore if the nested value of `Lazy<T>` is to be validated, 
+evaluation will be forced and thus defeating the purpose of `Lazy<T>`.
+- Validation of `io.vavr.control.Validation<T>` is out of scope/undefined for obvious reasons.
