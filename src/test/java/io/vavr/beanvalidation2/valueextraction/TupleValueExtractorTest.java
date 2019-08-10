@@ -23,12 +23,12 @@ import io.vavr.Tuple;
 import io.vavr.Tuple0;
 import io.vavr.Tuple1;
 import io.vavr.Tuple3;
+import io.vavr.beanvalidation2.ValidatorSupplier;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
-import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -44,7 +44,7 @@ public class TupleValueExtractorTest {
 
     @Before
     public void setUp() {
-        this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+        this.validator = ValidatorSupplier.INSTANCE.get();
         this.bean = new TestBean();
     }
 
@@ -70,6 +70,7 @@ public class TupleValueExtractorTest {
 
         Path.Node offendingNode = iterator.next();
         assertThat(offendingNode.getIndex()).isEqualTo(index);
+        assertThat(offendingNode.getName()).isEqualTo("<element>");
     }
 
     @Test

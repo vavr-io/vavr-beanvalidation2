@@ -1,3 +1,10 @@
+io.vavr.beanvalidation2.valueextraction.SeqValueExtractor
+io.vavr.beanvalidation2.valueextraction.MapKeyExtractor
+io.vavr.beanvalidation2.valueextraction.MapValueExtractor
+io.vavr.beanvalidation2.valueextraction.MultimapKeyExtractor
+io.vavr.beanvalidation2.valueextraction.MultimapValueExtractor
+io.vavr.beanvalidation2.valueextraction.EitherLeftExtractor
+io.vavr.beanvalidation2.valueextraction.EitherRightExtractor
 io.vavr.beanvalidation2.valueextraction.Tuple1Extractor$FirstExtractor
 io.vavr.beanvalidation2.valueextraction.Tuple2Extractor$FirstExtractor
 io.vavr.beanvalidation2.valueextraction.Tuple2Extractor$SecondExtractor

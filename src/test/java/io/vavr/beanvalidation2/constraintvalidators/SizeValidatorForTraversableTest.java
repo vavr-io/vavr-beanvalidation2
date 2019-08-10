@@ -19,12 +19,17 @@
  */
 package io.vavr.beanvalidation2.constraintvalidators;
 
-import io.vavr.collection.*;
+import io.vavr.beanvalidation2.ValidatorSupplier;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.HashSet;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
+import io.vavr.collection.Seq;
+import io.vavr.collection.Set;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.Size;
 import java.util.Collection;
@@ -39,7 +44,7 @@ public class SizeValidatorForTraversableTest {
 
     @Before
     public void setUp() {
-        this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+        this.validator = ValidatorSupplier.INSTANCE.get();
         this.bean = new TestBean();
     }
 
