@@ -1,8 +1,9 @@
 [![Build Status](https://travis-ci.org/vavr-io/vavr-beanvalidation2.png)](https://travis-ci.org/vavr-io/vavr-beanvalidation2)
 
-# Vavr-Beanvalidation 2.0
+# Vavr-Beanvalidation
 
-This module provides support for bean validation 2.0 (JSR380). Can be used with any service provider of the bean validation spec 
+This module provides support for bean validation 2.0 (JSR380) and bean validation 3.0. Can be used with any service 
+provider of the bean validation spec 
 e.g. `org.hibernate.validator:hibernate-validator`
 
 Features:
@@ -17,7 +18,11 @@ as to where violations occurred (index for `Seq`s and key for `Map`s)
 
 # Using the module
 
-Add the dependency to your classpath. For maven:
+## Dependencies 
+
+Depending on the version of bean validation add one of the dependencies to your classpath. For maven:
+
+### Bean validation 2
 
 ```xml
 <dependency>
@@ -26,6 +31,18 @@ Add the dependency to your classpath. For maven:
     <version>0.10.0</version>
 </dependency>
 ```
+
+### Bean validation 3
+
+```xml
+<dependency>
+    <groupId>io.vavr</groupId>
+    <artifactId>vavr-beanvalidation3</artifactId>
+    <version>0.10.0</version>
+</dependency>
+```
+
+## Configuration
 
 For the bean validation service provider to pick it up the constraints must be registered.
 Add the following to your `validation.xml`:
