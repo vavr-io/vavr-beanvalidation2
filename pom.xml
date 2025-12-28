@@ -43,7 +43,7 @@
         <javax.xml.version>2.3.0</javax.xml.version>
         <javax.el.version>3.0.0</javax.el.version>
 
-        <test.junit.version>4.12</test.junit.version>
+        <test.junit.version>4.13.1</test.junit.version>
         <test.assertj.version>3.12.2</test.assertj.version>
 
         <maven.compiler.version>3.8.1</maven.compiler.version>
